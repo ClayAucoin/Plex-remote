@@ -4,28 +4,41 @@ import ctypes
 HOST = "0.0.0.0"
 PORT = 8765
 
-VK_MEDIA_PLAY_PAUSE = 0xB3
 KEYEVENTF_KEYUP = 0x0002
 
+MEDIA_KEYS = {
+    "/playpause": 0xB3,
+    "/stop": 0xB2,
+    "/next": 0xB0,
+    "/previous": 0xB1,
+    "/volumeup": 0xAF,
+    "/volumedown": 0xAE,
+    "/mute": 0xAD,
+}
 
-def play_pause():
-    ctypes.windll.user32.keybd_event(VK_MEDIA_PLAY_PAUSE, 0, 0, 0)
-    ctypes.windll.user32.keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_KEYUP, 0)
+
+def press_media_key(vk_code):
+    ctypes.windll.user32.keybd_event(vk_code, 0, 0, 0)
+    ctypes.windll.user32.keybd_event(vk_code, 0, KEYEVENTF_KEYUP, 0)
 
 
 class RemoteHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/playpause":
-            play_pause()
+        if self.path in MEDIA_KEYS:
+            press_media_key(MEDIA_KEYS[self.path])
 
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            self.wfile.write(b"Play/Pause sent")
+
+            action = self.path.lstrip("/")
+            self.wfile.write(f"{action} sent".encode())
 
         else:
             self.send_response(404)
+            self.send_header("Content-type", "text/plain")
             self.end_headers()
+            self.wfile.write(b"Unknown command")
 
     def log_message(self, format, *args):
         print(f"{self.client_address[0]} - {format % args}")
@@ -33,7 +46,10 @@ class RemoteHandler(BaseHTTPRequestHandler):
 
 server = HTTPServer((HOST, PORT), RemoteHandler)
 
-print(f"Plex remote listening on port {PORT}")
-print(f"Try: http://192.168.1.120:{PORT}/playpause")
+print(f"Remote control listening on port {PORT}")
+print("Available commands:")
+
+for command in MEDIA_KEYS:
+    print(f"  http://192.168.1.120:{PORT}{command}")
 
 server.serve_forever()

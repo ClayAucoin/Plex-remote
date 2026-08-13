@@ -1,0 +1,1 @@
+Invoke-WebRequest -Uri "http://192.168.1.120:8765/playpause" -UseBasicParsing | Out-Null
