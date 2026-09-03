@@ -15,6 +15,10 @@ MEDIA_KEYS = {
     "/volumedown": 0xAE,
     "/mute": 0xAD,
     "/enter": 0x0D,
+    "/left": 0x25,
+    "/up": 0x26,
+    "/right": 0x27,
+    "/down": 0x28,
 }
 
 
