@@ -55,6 +55,6 @@ print(f"Remote control listening on port {PORT}")
 print("Available commands:")
 
 for command in MEDIA_KEYS:
-    print(f"  http://192.168.1.120:{PORT}{command}")
+    print(f"  {command}")
 
 server.serve_forever()

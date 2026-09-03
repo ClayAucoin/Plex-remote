@@ -1,11 +1,16 @@
+If WScript.Arguments.Count = 0 Then
+    WScript.Quit
+End If
+
 Set shell = CreateObject("WScript.Shell")
 
-shell.Run "curl.exe -s http://192.168.1.120:8765/playpause", 0, True
+LaptopIP = "192.168.1.180"
+Port = "8765"
+
+Action = WScript.Arguments(0)
+
+URL = "http://" & LaptopIP & ":" & Port & "/" & Action
+
+shell.Run "curl.exe -s """ & URL & """", 0, True
 
 Set shell = Nothing
-
-' http://192.168.1.120:8765/volumeup
-' http://192.168.1.120:8765/volumedown
-' http://192.168.1.120:8765/mute
-' http://192.168.1.120:8765/next
-' http://192.168.1.120:8765/previous
