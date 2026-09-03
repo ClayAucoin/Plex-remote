@@ -19,6 +19,7 @@ MEDIA_KEYS = {
     "/up": 0x26,
     "/right": 0x27,
     "/down": 0x28,
+    "/escape": 0x1B,
 }
 
 
