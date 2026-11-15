@@ -1,0 +1,1 @@
+Invoke-WebRequest -Uri "http://192.168.1.180:8765/next" -UseBasicParsing | Out-Null
